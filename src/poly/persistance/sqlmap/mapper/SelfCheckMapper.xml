@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="poly.persistance.mapper.ISelfCheckMapper">
+
+	<!-- 자가점겸표 등록하기 -->
+	<insert id="insertSCInfo" parameterType="SelfCheckDTO">
+		INSERT INTO SELF_CHECK
+		(
+			AIR,
+			DISTANCE,
+			TIME,
+			SCALE,
+			ACTIVITY,
+			MANAGER,
+			HDISINFECTANT,
+			MASK,
+			ANNOUNCEMENT,
+			DISINFECTION,
+			NAMECHECK,
+			SAFETY_RESTRNT_NO
+		)
+		VALUES(
+			#{air},
+			#{distance},
+			#{time},
+			#{scale},
+			#{activity},
+			#{manager},
+			#{hdisinfectant},
+			#{mask},
+			#{announcement},
+			#{disinfection},
+			#{namecheck},
+			#{safety_restrnt_no}
+		)
+	</insert>
+	
+	<!-- 자가점검표 업데이트 -->
+	<update id="updSCInfo" parameterType="SelfCheckDTO">
+		UPDATE SELF_CHECK
+		SET
+			AIR = #{air},
+			DISTANCE = #{distance},
+			TIME = #{time},
+			SCALE = #{scale},
+			ACTIVITY = #{activity},
+			MANAGER = #{manager},
+			HDISINFECTANT = #{hdisinfectant},
+			MASK = #{mask},
+			ANNOUNCEMENT = #{announcement},
+			DISINFECTION = #{disinfection},
+			NAMECHECK = #{namecheck}
+		WHERE SAFETY_RESTRNT_NO = #{safety_restrnt_no}
+	</update>
+	
+	<!-- 자가점겸표 총 갯수 --> 
+	<select id="countSC" resultType="int">
+		SELECT COUNT(*) FROM SELF_CHECK
+	</select>
+	
+	<!-- 기등록된 자가점검표 정보 불러오기 -->
+	<select id="getSCInfo" parameterType="SelfCheckDTO" resultType="SelfCheckDTO">
+		SELECT * FROM SELF_CHECK
+		WHERE SAFETY_RESTRNT_NO = #{safety_restrnt_no}
+	</select>
+	
+</mapper>

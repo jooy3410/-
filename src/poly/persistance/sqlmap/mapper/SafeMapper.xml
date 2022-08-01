@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.ISafeMapper">
+
+	<!-- 회원 가입하기(회원정보 등록하기) -->
+	<insert id="insertSafeUserInfo" parameterType="SafeDTO">
+		INSERT INTO BUSER_INFO
+			(
+				USER_ID,
+				USER_NAME,
+				USER_NUM,
+				PASSWORD,
+				EMAIL,
+				ADDR1,
+				ADDR2,
+				SAFETY_RESTRNT_NO,
+				STORENAME,
+				BNUMBER,
+				PNUMBER,
+				REG_ID,
+				REG_DT,
+				CHG_ID,
+				CHG_DT
+			)
+			VALUES(
+				#{user_id},
+				#{user_name},
+				1,
+				#{password},
+				#{email},
+				#{addr1},
+				#{addr2},
+				#{safety_restrnt_no},
+				#{storename},
+				#{bnumber},
+				#{pnumber},
+				#{user_id},
+				SYSDATE,
+				#{user_id},
+				SYSDATE
+		)
+	</insert>
+	
+	<!-- 사업자 회원정보 수정 -->
+	<update id="updBUserInfo">
+		UPDATE BUSER_INFO
+		SET
+			USER_ID = #{user_id},
+			USER_NAME = #{user_name},
+			PASSWORD = #{password},
+			EMAIL = #{email},
+			ADDR1 = #{addr1},
+			ADDR2 = #{addr2},
+			SAFETY_RESTRNT_NO = #{safety_restrnt_no},
+			STORENAME = #{storename},
+			BNUMBER = #{bnumber},
+			PNUMBER = #{pnumber},
+			CHG_DT = SYSDATE
+		WHERE USER_ID = #{user_id}
+	</update>
+	
+		<!-- 이메일로 회원가입 중복 방지 -->
+	<select id="getSafeUserExists" parameterType="SafeDTO" resultType="SafeDTO">
+		SELECT DECODE(COUNT(1),0,'N','Y') AS EXISTS_YN
+		FROM
+		BUSER_INFO
+		WHERE EMAIL=#{email}
+	</select>
+	
+	<!-- 로그인을 위해 아이디와 비밀번호가 일치하는지 확인하기 -->
+	<select id="getUserSafeLoginCheck" parameterType="SafeDTO" resultType="SafeDTO">
+		SELECT USER_ID, USER_NAME, EMAIL
+		FROM BUSER_INFO
+		WHERE USER_ID = #{user_id}
+		AND PASSWORD = #{password}
+	</select>
+	
+	<!-- 사업자 정보 불러오기 -->
+	<select id="getBuserInfo" parameterType="SafeDTO" resultType="SafeDTO">
+		SELECT * FROM BUSER_INFO
+		WHERE USER_ID = #{user_id}
+	</select>
+	
+	<!-- 사업자 비밀번호 변경 -->
+	<update id="changePwdB" parameterType="SafeDTO">
+		UPDATE BUSER_INFO
+		SET PASSWORD = #{password}
+		WHERE USER_ID = #{user_id}
+	</update>
+	
+	<!-- ######################################################################################################################## -->
+	
+	<!-- 개안회원 가입하기(회원정보 등록하기) -->
+	<insert id="insertNUserInfo" parameterType="NUserInfoDTO">
+		INSERT INTO PUSER_INFO
+			(
+				USER_ID,
+				USER_NAME,
+				PASSWORD,
+				EMAIL,
+				ADDR1,
+				ADDR2,
+				PNUMBER,
+				USER_NUM,
+				REG_ID,
+				REG_DT,
+				CHG_ID,
+				CHG_DT
+			)
+			VALUES(
+				#{user_id},
+				#{user_name},
+				#{password},
+				#{email},
+				#{addr1},
+				#{addr2},
+				#{pnumber},
+				2,
+				#{user_id},
+				SYSDATE,
+				#{user_id},
+				SYSDATE
+		)
+	</insert>
+	
+	<!-- 개인회원 회원정보 수정 -->
+	<update id="updPUserInfo">
+		UPDATE PUSER_INFO
+		SET
+			USER_ID = #{user_id},
+			USER_NAME = #{user_name},
+			PASSWORD = #{password},
+			EMAIL = #{email},
+			ADDR1 = #{addr1},
+			ADDR2 = #{addr2},
+			PNUMBER = #{pnumber},
+			CHG_DT = SYSDATE
+		WHERE USER_ID = #{user_id}
+	</update>
+	
+	<!-- 이메일로 회원가입 중복 방지 -->
+	<select id="getNUserExists" parameterType="NUserInfoDTO"
+		resultType="NUserInfoDTO">
+		SELECT DECODE(COUNT(1),0,'N','Y') AS EXISTS_YN
+		FROM
+		PUSER_INFO
+		WHERE EMAIL=#{email}
+	</select>
+	
+	<!-- 로그인을 위해 아이디와 비밀번호가 일치하는지 확인하기 -->
+	<select id="getNUserLoginCheck" parameterType="NUserInfoDTO" resultType="NUserInfoDTO">
+		SELECT USER_ID, USER_NAME, EMAIL
+		FROM PUSER_INFO
+		WHERE USER_ID = #{user_id}
+		AND PASSWORD = #{password}
+	</select>
+	
+	<!-- 개인회원 정보 불러오기 -->
+	<select id="getPuserInfo" parameterType="NUserInfoDTO" resultType="NUserInfoDTO">
+		SELECT * FROM PUSER_INFO
+		WHERE USER_ID = #{user_id}
+	</select>
+	
+	<!-- 개인회원 비밀번호 변경 -->
+	<update id="changePwdP" parameterType="NUserInfoDTO">
+		UPDATE PUSER_INFO
+		SET PASSWORD = #{password}
+		WHERE USER_ID = #{user_id}
+	</update>
+	
+</mapper>
